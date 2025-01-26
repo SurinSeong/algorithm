@@ -20,3 +20,22 @@ def find_max_number(number_list):
         
 
 print(find_max_number([1, 3, 10, 9, 7]))
+
+# 다른 방식으로 해보기
+# 입력 : 리스트와 리스트 길이
+# 출력 : 최댓값
+
+def find_max_number(number_list, list_length):
+    # 리스트 길이가 1 이라면
+    if list_length == 1:
+        # 요소 하나의 값 반환
+        return number_list[0]
+    # 1 이상이라면
+    else:
+        max_number = find_max_number(number_list, list_length-1)
+        if max_number > number_list[list_length-1]:
+            return max_number
+        else:
+            return number_list[list_length-1]
+        
+# ==> 이거 글로 써보면서 해보기
