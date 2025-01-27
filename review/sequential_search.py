@@ -11,7 +11,20 @@
 # 특정 값 : (18, 33, 900)
 
 def search_number(number_list, target):
-    if number_list[0] == target:
-        return number_list.find(target)
+    for i in range(len(number_list)):
+        if number_list[i] == target:
+            return i
     else:
-        
+        return -1
+    
+
+
+v = [17, 92, 18, 33, 58, 7, 33, 42]
+    
+print(search_number(v, 18))
+print(search_number(v, 20))
+
+
+'''
+순차 탐색의 계산 복잡도는 O(n)
+'''
