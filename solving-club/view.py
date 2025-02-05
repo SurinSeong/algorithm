@@ -6,6 +6,7 @@ T = int(input())
 
 # 각 테스트 케이스 별 문제 풀기
 for t in range(1, T+1):
+    
     # 건물의 개수
     N = int(input())
     # 건물 높이 리스트
