@@ -12,34 +12,30 @@ for t in range(1, T+1):
     # 건물 높이 리스트
     arr = list(map(int, input().split()))
 
-    # 총 세대 수
+    # 조망권 확보 총 세대 수
     total = 0
 
     for i in range(2, N-2):
-        # 해당 인덱스가 중심.
+        # 해당 인덱스가 중심 건물임.
         center = arr[i]
-        # 중심 건물 +-2의 건물 조사
+        # 중심 건물의 주변 건물(-2, +2) 조사
         for j in range(i-2, i+3):
             # 중심보다 더 높은 건물이 나온다면
             if center < arr[j]:
+                # 중심 건물 자격 박탈
                 center = arr[j]
+                # 끝내기
                 break
 
-        # 중심 건물이 달라졌다면
-        if center != arr[i]:
-            continue
-
         # 중심보다 더 높은 건물이 나오지 않았다면
-        else:
+        if center == arr[i]:
             # 중심 건물을 제외하고 가장 높은 건물 구하기
             second_max = arr[i-2]   # 가정
             # 다시 중심 주변 건물 확인
-            for j in range(i-1, i+3):
-                # 중심 건물이면 통과
-                if i == j:
-                    continue
-                # 아니면 중심 건물 다음으로 큰 건물 구하기
-                else:
+            for j in range(i-1, i+3):   # 가정한 인덱스 제외하고
+                # 중심 건물 아니면 중심 건물 다음으로 큰 건물 구하기
+                if i != j:
+                    # second_max 구하기
                     if second_max < arr[j]:
                         second_max = arr[j]
             # 총 세대 수에 넣어주기
