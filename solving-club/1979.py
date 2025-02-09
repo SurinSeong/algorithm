@@ -9,35 +9,48 @@ sys.stdin = open(filename, 'r')
 T = int(input())
 
 for t in range(1, T+1):
-    # 가로 세로, 단어길이
+    # 가로 세로, 단어 길이
     N, K = map(int, input().split())
     # 퍼즐
     puzzle = [list(map(int, input().split())) for _ in range(N)]
-    # 단어가 들어갈 수 있는 곳의의 개수
-    total = 0
-    for i in range(N):
-        for j in range(N):
-            # 흰 부분이라면
-            if puzzle[i][j] == 1:
-                # 우하
-                delta = [[0, 1], [1, 0]]
-                for di, dj in delta:
-                    # 단어길이+1에서 부터 확인
-                    for k in range(1, K+1):
-                        next_i, next_j = i + di*k, j + dj*k
-                        # N x N 안에 있는 범위 인가 확인하기
-                        if (0 <= next_i < N) and (0 <= next_j < N):
-                            # 검은색인지 확인하기
-                            if puzzle[next_i][next_j] == 0:
-                                break
-                        # 범위 안에 없다면
-                        else:
-                            break
-                    else:
-                        # 다음 위치가 검은색인지 확인하기
-                        next_i, next_j = i + di*(K+1), j + dj*(K+1)
-                        # 
-                        if (0 <= next_i < N) and (0 <= next_j < N) and (puzzle[next_i][next_j] == 0):
-                            total += 1
     
+    # 단어가 들어갈 수 있는 빈칸의 개수
+    total = 0
+    # 퍼즐 돌기
+    for i in range(N):
+        # 줄별 합 확인하기
+        row_sum, col_sum = 0, 0
+        for j in range(N):
+            # 행별 들어갈 수 있는 칸 수 확인하기
+            # 검은 색이면 넘기기
+            if puzzle[i][j] == 0:
+                # 만약 이미 칸수가 다 찼다면
+                if row_sum == K:
+                    # 단어가 들어갈 수 있음
+                    total += 1
+                # 칸수 리셋
+                row_sum = 0
+            # 흰색이면
+            else:
+                # 칸수에 1씩 더하기
+                row_sum += 1
+                
+            # 열별 들어갈 수 있는 칸 수 확인하기
+            # 검은 색이면
+            if puzzle[j][i] == 0:
+                if col_sum == K:
+                    total += 1
+                col_sum = 0
+            else:
+                col_sum += 1
+        
+        # 각 행을 모두 돌고나서의 칸수 합이 단어의 길이와 같다면
+        if row_sum == K:
+            # 전체 들어갈 수 있는 칸수에 +1
+            total += 1
+        
+        # 각 열을 돌고 나서 ~
+        if col_sum == K:
+            total += 1
+            
     print(f'#{t} {total}')
