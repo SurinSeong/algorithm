@@ -1,13 +1,43 @@
-# 맨 마지막이 아니라면
-    # 만약 오른쪽에 1이 있다면
-    if ((0 <= j+1 < 100) and (0 <= i < 100)) and (matrix[i][j+1] == 1):
-        # 어디까지 1이 있는지 찾아보기 -> 마지막 j값 받기
-        # new_j = find_end_of_one(i, j, matrix, 'r')
-        solve_ladder(matrix, i, j)
-    # 만약 왼쪽에 1이 있다면
-    elif (0 <= j-1 < 100) and (matrix[i][j-1] == 1):
-        # new_j = find_end_of_one(i, j, matrix, 'l')
-        solve_ladder(matrix, i, j)
-    # 아래쪽에 1이 있다면 (오른쪽 왼쪽 둘다 없음)
-    elif (0 <= i+1 < 100) and (matrix[i+1][j] == 1):
-        solve_ladder(matrix, i+1, j)
+import sys
+from pathlib import Path
+
+filename = Path.cwd() / 'solving-club/input/input_1210.txt'
+sys.stdin = open(filename, 'r')
+
+
+def find_start(i, j, matrix):
+    while 0 <= i < 100:
+        # 왼쪽이나 오른쪽에 1이 있으면 올라가기
+        # 1. 왼쪽
+        if (0 <= i < 100) and (0 <= j-1 < 100) and matrix[i][j-1] == 1:
+            # 왼쪽으로 몇칸까지 갈 수 있는지 확인하기
+            while (0 <= j < 100) and matrix[i][j] == 1:
+                j -= 1
+            find_start(i-1, j, matrix)
+        # 2. 오른쪽
+        elif (0 <= i < 100) and (0 <= j+1 < 100) and matrix[i][j+1] == 1:
+            while (0 <= j < 100) and matrix[i][j] == 1:
+                j += 1
+            find_start(i-1, j, matrix)
+            
+        # 3. 윗부분에 1이 있으면 올라가기
+        else:
+            find_start(i-1, j, matrix)
+        
+    return j
+
+# 테스트 케이스
+for _ in range(10):
+    # 테스트케이스 번호
+    t = int(input())
+    # 100x100 matrix 받기
+    puzzle = [list(map(int, input().split())) for _ in range(100)]
+
+    for x in range(100):
+        # 만약 첫 번째가 0이면 길이 없음.
+        if puzzle[99][x] == 2:
+            break
+    # 위에서 찾는 x 부터 시작해서 올라가기
+    result = find_start(99, x, puzzle)
+    
+    print(f'#{t} {result}')

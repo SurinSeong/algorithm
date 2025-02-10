@@ -15,37 +15,44 @@ sys.stdin = open(filename, 'r')
 # 함수
 # 오른쪽 이동
 def find_end_of_right_one(i, j, matrix):
-    pass
+    # 0이면 끝내기
+    while (0 <= j < 100) and matrix[i][j] == 1:
+        j += 1
+    return j-1
 
 
 # 왼쪽 이등
 def find_end_of_left_one(i, j, matrix):
-    pass
+    while (0 <= j < 100) and matrix[i][j] == 1:
+        j -= 1
+    return j+1
 
 
 def solve_ladder(matrix, i, j):
     # 맨 아래까지가서 끝남.
-    while 0 <= i < 100:
-        # 하나 내리기
-        i += 1
-        # 만약 오른쪽에 1이 있다면
-        if ((0 <= j + 1 < 100) and (0 <= i < 100)) and (matrix[i][j + 1] == 1):
+    while i < 100:
+        # 먼저 오른쪽 확인하기
+        if (0 <= i < 100) and (0 <= j+1 < 100) and matrix[i][j+1] == 1:
             # 어디까지 1이 있는지 찾아보기 -> 마지막 j값 받기
-            j = find_end_of_one(i, j, matrix, 'r')
+            j = find_end_of_right_one(i, j, matrix)
             # 한칸 내려가기
             i += 1
+            
         # 만약 왼쪽에 1이 있다면
-        elif ((0 <= j - 1 < 100) and (0 <= i < 100)) and (matrix[i][j - 1] == 1):
+        elif (0 <= j - 1 < 100) and (0 <= i < 100) and matrix[i][j-1] == 1:
             # 어디까지 1이 있는지 찾아보기 -> 마지막 j값 받기
-            j = find_end_of_one(i, j, matrix, 'l')
+            j = find_end_of_left_one(i, j, matrix)
             # 한칸 내려가기
+            i += 1
+        
+        # 오왼 없다면
+        else:
             i += 1
 
 
-
-    if matrix[i-1][j] == 2:
-        return j
-    return 0
+    if matrix[99][j] == 2:
+        return True
+    return False
 
 
 # 테스트 케이스
@@ -59,10 +66,11 @@ for _ in range(10):
         # 만약 첫 번째가 0이면 길이 없음.
         if puzzle[0][x] == 0:
             continue
-        # 1이면 길찾기 시작
-        result = solve_ladder(puzzle, 0, x)
+        else:
+            # 1이면 길찾기 시작
+            result = solve_ladder(puzzle, 1, x)
 
-        if result != 0:
-            break
+            if result:
+                break
 
-    print(f'#{t} {result}')
+    print(f'#{t} {x}')
