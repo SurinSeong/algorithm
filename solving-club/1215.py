@@ -5,7 +5,7 @@ filename = Path.cwd() / 'solving-club/input/input_1215.txt'
 sys.stdin = open(filename, 'r')
 
 
-# 2. 가로 세로 전부 찾아보기
+#  가로 세로 전부 찾아보기
 def find_palindrome(arr, n):
     # 회문 개수
     palindrome = 0
@@ -23,12 +23,15 @@ def find_palindrome(arr, n):
 
     return palindrome
 
-for _ in range(10):
-matrix = [list(input()) for _ in range(8)]
-# 전치
-matrix_T = list(map(list, zip(*matrix)))
+for t in range(1, 11):
+    # 회문의 길이
+    N = int(input())
+    
+    matrix = [list(input()) for _ in range(8)]
+    # 전치
+    matrix_T = list(map(list, zip(*matrix)))
 
-result1 = find_palindrome(matrix, N)
-result2 = find_palindrome(matrix_T, N)
+    result1 = find_palindrome(matrix, N)
+    result2 = find_palindrome(matrix_T, N)
 
-print(result1 + result2)
+    print(f'#{t} {result1 + result2}')
