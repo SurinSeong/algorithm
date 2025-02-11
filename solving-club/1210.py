@@ -49,7 +49,6 @@ def solve_ladder(matrix, i, j):
         else:
             i += 1
 
-
     if matrix[99][j] == 2:
         return True
     return False
@@ -64,13 +63,9 @@ for _ in range(10):
 
     for x in range(100):
         # 만약 첫 번째가 0이면 길이 없음.
-        if puzzle[0][x] == 0:
-            continue
-        else:
+        if puzzle[0][x] == 1:
             # 1이면 길찾기 시작
-            result = solve_ladder(puzzle, 1, x)
-
-            if result:
+            if solve_ladder(puzzle, 1, x):
                 break
 
     print(f'#{t} {x}')

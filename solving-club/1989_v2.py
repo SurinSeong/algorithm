@@ -7,6 +7,10 @@ filename = Path.cwd() / 'solving-club/input/input_1989.txt'
 sys.stdin = open(filename, 'r')
 
 
+def check_palindrome():
+    pass
+
+
 # 테스트 케이스 개수
 T = int(input())
 
