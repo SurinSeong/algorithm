@@ -21,6 +21,7 @@ def search_palindrome(arr, n):
                 word_length = end - start + 1
                 if arr[i][start:end+1] == arr[i][start:end+1][::-1]:
                     max_length = max(max_length, word_length)
+                    break
 
     return max_length
 
