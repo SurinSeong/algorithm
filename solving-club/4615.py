@@ -4,41 +4,63 @@
 # 돌의 색이 1이면 흑돌, 2이면 백돌
 # N은 4, 6, 8
 # M 돌을 놓는 횟수
-# import sys
-# from pathlib import Path
-#
-# filename = Path.cwd() / 'solving-club/input/input_4615.txt'
-# sys.stdin = open(filename, 'r', encoding='utf-8')
+import sys
+from pathlib import Path
+
+filename = Path.cwd() / 'solving-club/input/input_4615.txt'
+sys.stdin = open(filename, 'r', encoding='utf-8')
 
 
-# 모든 곳의 최솟값 찾기
-def find_min(matrix):
-    min_num = min(matrix[0])
-    for i in range(1, N):
-        min_num = min(min_num, min(matrix[i]))
-    return min_num
+
+# 놓을 곳 주변에 다른색이 있는지 확인하기
+def find_other_color(r, c, my_color):
+    can_change = [[0] for _ in range(8)]
+    for i, d in enumerate(delta):
+        dr, dc = d[0], d[-1]
+        next_r, next_c = r + dr, c + dc
+        # 1. 상대 돌이 범위에 있는지 확인하기
+        condition1 = ((0 <= next_r < N) and (0 <= next_c < N))
+        if condition1:
+            condition2 = (board[next_r][next_c] != my_color) and (board[next_r][next_c] != 0)
+            if condition2:
+                can_change[i] = [next_r, next_c]
+    
+    return can_change
+        
+
+# 확인된 것들의 같은 줄에 나랑 같은 색이 있는지 확인하기
+def find_my_color(can_change, my_color):
+    be_changed = []
+    
+    for i, change in enumerate(can_change):
+        if change != [0]:
+            
+            current_delta = delta[i]
+            dr, dc = current_delta[0], current_delta[-1]
+            r, c = change[0], change[-1]
+            
+            for k in range(1, N):
+                next_r, next_c = r + dr*k, c + dc*k
+                condition1 = ((0 <= next_r < N) and (0 <= next_c < N))
+                if condition1:
+                    condition2 = (board[next_r][next_c] == my_color)
+                    if condition2:
+                        # 바꿀 좌표 추가
+                        for x in range(-1, k+1):
+                            be_changed.append([r+dr*x, c+dc*x])
+    
+    return be_changed 
 
 
 # 색 바꾸기
-def change_color(r, c, my_color, n):
-    for dr, dc in delta:
-        # 1. 상대 돌이 범위에 있는지 확인하기
-        if (0 <= r + dr < n) and (0 <= c + dc < n):
-            # 다른 색이면
-            if (board[r + dr][c + dc] != my_color) and (board[r + dr][c + dc] != 0):
-                # 2. 둘거랑 같은 색이 범위에 있는지 확인하기
-                if (0 <= r + dr*2 < n) and (0 <= c + dc*2 < n):
-                    # 옆에 나랑 같은게 있는지 확인
-                    if board[r+dr*2][c+dc*2] == my_color:
-                        # 있으면 색 바꾸기
-                        board[r][c] = board[r + dr][c + dc] = my_color
-                        # 색을 바꿨으면
-                        return True
-    # 색을 바꾸지 못했으면
-    return False
+def change_color(idx_list, my_color):
+    for r, c in idx_list:
+        board[r][c] = my_color
+    return board
+    
 
 
-# 색은?
+# 마지막!
 def count_color(n):
     b = w = 0
     for i in range(n):
@@ -66,30 +88,28 @@ for tc in range(1, T+1):
     board[N//2-1][N//2-1] = board[N//2][N//2] = 2   # 백돌
     board[N//2-1][N//2] = board[N//2][N//2-1] = 1   # 흑돌
 
+    # 플레이 횟수
     game_set = []
-    # M번 돌면서 바꾸기
     for _ in range(M):
-        # 위의 종료조건에 해당하지 않으면
         col, row, color = map(int, input().split())
         game_set.append([col-1, row-1, color])
 
-    # 돌 못 놓은 경우 카운팅
-    cnt = 0
-    game_cnt = 0
 
-    while cnt != 2 and game_cnt != M and find_min(board) != 0:
+    for c, r, player in game_set:
+        # 먼저 바꾸기
+        board[r][c] = player
+        
+        delta = [[0, 1], [1, 1], [1, 0], [1, -1], [0, -1], [-1, -1], [-1, 0], [-1, 1]]
 
-        for c, r, change in game_set:
-            delta = [[0, 1], [1, 1], [1, 0], [1, -1], [0, -1], [-1, -1], [-1, 0], [-1, 1]]
-
-            # 두기 시작
-            # 놓을 수가 없다면
-            if not change_color(r, c, change, N):
-                cnt += 1
-            else:
-                cnt = 0
-
-        game_cnt += 1
+        check_others = find_other_color(r, c, player)
+        # print(check_others)
+            
+        change_to_my_color = find_my_color(check_others, player)
+        # print(change_to_my_color)
+        
+        board = change_color(change_to_my_color, player)
+        # print(board)
+            
 
     black, white = count_color(N)
 
