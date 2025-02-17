@@ -11,23 +11,24 @@ sys.stdin = open(filename, 'r')
 
 
 def calculator(string):
+    
     stack = [0] * 256
     top = -1
-
+    
     for x in string:
-        # if x == '.':
-        #     if top >= 1 or top == -1:
-        #         return 'error'
-
 
         if x not in '+-*/':     # 피연산자이면
             top += 1
             stack[top] = x      # push
 
         elif x != '.':   # 연산자이면
-            op2 = stack[top]    # pop
+            
+            if top == 0:
+                return 'error'
+            
+            op2 = int(stack[top])    # pop
             top -= 1
-            op1 = stack[top]    # pop
+            op1 = int(stack[top])    # pop
             top -= 1
 
             # 연산자 종류 확인
@@ -43,15 +44,26 @@ def calculator(string):
             elif x == '/':
                 top += 1
                 stack[top] = op1 / op2      # 계산 후 push
-
+        
+            print(top)
+            
+    if top == 1:
+        top -= 1
+        return stack[top]
+    
+    return 'error'
+    
+    
+        
+    
 
 # 테스트 케이스 개수
 T = int(input())
 
 for test_case in range(1, T+1):
     # 연산 코드
-    postfix = list(input())
+    postfix = input().split()
 
-    result = ''
+    result = calculator(postfix)
 
     print(f'#{test_case} {result}')
