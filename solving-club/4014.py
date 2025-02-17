@@ -10,83 +10,85 @@ filename = Path.cwd() / 'solving-club/input/input_4014.txt'
 sys.stdin = open(filename, 'r', encoding='utf-8')
 
 
-# 전체 배열에서 최댓값 구하기
-def find_max(arr, n):
-    # 우선 가정
-    max_num = max(arr[0])
+"""
+[활주로 건설 조건]
+0. 모든 높이가 동일해야 한다.
+1. 하나의 라인에서 최대 높이보다 작은 것들이 경사로 길이보다 길어야 한다. (이때, 작은 것이 여러 개라면 각각 다 1씩 차이 나야 한다.)
+2. 가장 높은 지형 주변에는 하나 낮은 것이 있어야 한다.
+
+위의 조건과 반대가 되면 건설을 하지 못한다.
+
+경사도의 길이 : 2 <= x <= 4
+지형의 높이 : 1 <= <= 6
+한 변의 길이 : 6 <= <= 20
+"""
+# 
+def is_avaiable(line, n, w):
+    # 가장 높은, 가장 낮은 높이
+    max_num, min_num = max(line), min(line)
+    
+    cnt = 0
+    
     for i in range(1, n):
-        max_num = max(max_num, arr[i])
-    return max_num
 
-
-# 경사를 넣어서 확인하기
-def make_equal_height(r, x):
-    """
-    r : 현재의 행
-    x : 경사 길이
-    """
-    # 첫번째 위치 부터 비교해나간다.
-    previous = r[0]
-    # 연속한 지형의 수
-    cnt = 1
-    for i in range(1, len(r)):
-        # 현재 지형의 높이
-        current = r[i]
-        # 이전의 높이와 같으면
-        if current == previous:
-            # 연속 카운팅 올려주기
-            cnt += 1
-        # 다르면
-        # 이전 높이보다 현재 높이가 높으면
-        elif current > previous:
-            # 카운팅 개수 확인해서 경사의 길이보다 작으면 cnt 초기화
-            if cnt < x:
-                cnt = 0
-                # 이전의 지형 설정 변경
-                previous = r[i]
-            # 경사의 길이보다 크거나 같다면
+        if line[i-1] == line[i]:
+            cnt = 2
+            
+            if cnt == w:
+                cnt = 1
             else:
-                # cnt 초기화해주기
-                cnt = 0
-                # 경사 길이 만큼 이전 칸을 높여주자
-                for k in range(1, x+1):
-                    r[i-k] =
-
-
-            # 이전의 것과 확인
-            # 이전과 같으면
-            if current == previous:
-                # 카운딩
                 cnt += 1
-            # 다르면
+                
+            continue
+        
+        elif abs(line[i-1] - line[i]) != 1:
+            return False
+        
+        else:
+            if line[i-1] < line[i]:
+                return False
             else:
-                # 현재까지의 카운팅 확인
-                # 경사의 길이와 같으면
-                if cnt == X:
-                    # 높이 올려주기
-                    for k in range(X):
-                        r[i-k] += 1
-    if cnt == X:
-        for k in range(X):
-            r[i-k] += 1
-
-    return r
-
-
+                continue
+        
+            
+    pass
+    
+                
+def build_gradient(line, n, w):
+    # 활주로 건설 가능하지 않다고 우선 판단
+    result = False
+    
+    if len(set(line)) == 1:    # 모든 지형의 높이가 동일하다면
+        result = True
+        return result
+    
+    elif is_avaiable(line, n, w):
+        result = True
+        return result
+    
+    return result
+        
+        
 # 테스트 케이스 개수
 T = int(input())
 
-for tc in range(1, T+1):
+for test_case in range(1, T+1):
     # 지도의 한 변의 크기, 경사로의 길이
-    N, X = input().split()
-    N = int(N)
+    N, X = map(int, input().split())
+    
     # 지형 정보
     fields = [[int(num) for num in input().split()] for _ in range(N)]
 
-    # 지형 변화시키기기
-    for i, row in enumerate(fields):
-        fields[i] = find_low_ground(row, X)
-                            
-    print(fields)
+    cnt = 0
+    
+    # 행 확인
+    for field_row in fields:
+        if build_gradient(field_row, N, X):
+            cnt += 1
 
-    print(f'#{tc}')
+    # 열 확인
+    for field_col in zip(*fields):
+        if build_gradient(field_col, N, X):
+            cnt += 1
+    
+    print(f'#{test_case} {cnt}')
