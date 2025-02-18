@@ -6,7 +6,7 @@
 def dfs(v, n):
     # visited, stack 를 함수 밖에서도 사용하고 싶다면 밖에서 만들어두고 써도 된다.
     visited = [0] * (n+1)
-    stack = []
+    stack = [0]*n
     top = -1
 
     while True:
@@ -52,4 +52,4 @@ for i in range(E):
     adj_list[v].append(w)
     adj_list[w].append(v)
 
-dfs(i, V)
+dfs(1, V)
