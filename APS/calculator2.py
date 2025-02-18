@@ -27,5 +27,4 @@ for x in susik:
             top += 1
             stack[top] = op1 * op2  # 계산 결과를 스택에 넣어주기
 
-print("123123123")
 print(stack[top])

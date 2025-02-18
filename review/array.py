@@ -22,11 +22,11 @@ for i in range(N):
 
 # 3. 배열 원소 중 최댓값 max_v 찾기
 
+max_v = arr[i]  # arr[i]가 더 크면 max_v 갱신
 max_v = arr[0]  # 첫 원소를 최대로 가정
 
 for i in range(1, N):
     if max_v < arr[i]:
-        max_v = arr[i]  # arr[i]가 더 크면 max_v 갱신
         
 
 # 4. 배열 원소 중 최댓값의 인덱스 max_idx 찾기
