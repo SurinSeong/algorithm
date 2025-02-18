@@ -7,6 +7,10 @@ from pathlib import Path
 filename = Path.cwd() / 'solving-club/input/input_2805.txt'
 sys.stdin = open(filename, 'r')
 
+def find_border_line(n):
+    n//2
+    pass
+
 
 # 테스트 케이스 개수
 T = int(input())
