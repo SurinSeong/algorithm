@@ -1,8 +1,8 @@
-# import sys
-# from pathlib import Path
-#
-# filename = Path.cwd() / 'solving-club/input/input_5099.txt'
-# sys.stdin = open(filename, 'r')
+import sys
+from pathlib import Path
+
+filename = Path.cwd() / 'solving-club/input/input_5099.txt'
+sys.stdin = open(filename, 'r')
 
 """
 피자 굽기
@@ -17,47 +17,52 @@
 - 치즈의 양 C -> 한 바퀴 돌고 꺼내면 C//2
 - C가 0이되면 꺼내고 남은 피자 넣음
 """
-def melting_cheese(arr):
-    while 0 not in arr:
-        arr = [c // 2 for c in arr]
-    return arr
-
-
-# 테스트 케이스
 T = int(input())
 
 for test_case in range(1, T+1):
-    # 화덕 크기, 피자 개수
+    # 화덕의 크기, 피자 개수
     N, M = map(int, input().split())
-    # 피자에 있는 치즈의 개수
+    # 치즈양
     C = list(map(int, input().split()))
-
-    # 화덕
-    fire = [-1]*N
-    # 인덱스
-    pizza = [0]*N
-    # 다 녹은 치즈 피자
-    result = []
-
-    # 화덕에 피자 넣는다.
+    
+    q = [0]*N
+    pointer = 0
+    
+    # 초기 상태 설정하고 들어가기
     for i in range(N):
-        fire[i] = C[i]
-        pizza[i] = i+1
-
-    # 남은 피자 개수 만큼 반복
-    for i in range(M-N):
-        fire = melting_cheese(fire)    # 치즈 녹이기
-        for j in range(N-1):    # 0인 자리 찾기
-            if fire[i] == 0:
-                result.append(pizza[i])
-                pizza[i] = N+i
-                fire[i] = C[N+i]
-
-    print(fire)
-
-
-
-
-
-
-    print(f'#{test_case} {result}')
+        q[i] = [i, C[i]]
+    
+    next_idx = N
+    
+    while True:
+        
+        if q[pointer] is not None:    # 아직 채울 수 있는 것이 남아있을 때
+            if q[pointer][-1] == 0:    # 만약 치즈가 다 녹았다면
+                if next_idx < M:    # 추가할 수 있는 인덱스 번호가 남아있다면
+                    q[pointer] = [next_idx, C[next_idx]]    # 추가해주기
+                    next_idx += 1    # 인덱스 번호 업데이트
+                else:    # 추가할 수 있는 인덱스 번호가 없다면
+                    q[pointer] = None    # 빈자리로 만들기
+                
+            elif q[pointer][-1] != 0:    # 아직 치즈가 다 녹지 않았다면
+                q[pointer][-1] //= 2    # 치즈 녹이기
+                if q[pointer][-1] == 0:  # 만약 치즈가 다 녹았다면
+                    if next_idx < M:
+                        q[pointer] = [next_idx, C[next_idx]]    # 
+                        next_idx += 1
+                    else:
+                        q[pointer] = None
+        
+        pointer = (pointer + 1) % N    # 포인터 위치 변경
+        
+        # 빈자리가 아닌 개수
+        not_none = []
+        
+        for i in q:
+            if i is not None:    # 만약 빈자리가 아니라면
+                not_none.append(i[0])    # 리스트에 인덱스 넣어주기
+        
+        if len(not_none) == 1:    # 만약 빈자리가 아닌 개수가 하나이면
+            break    # 끝내기
+    
+    print(f'#{test_case} {not_none[0]+1}')
