@@ -6,17 +6,39 @@
 # 사람을 나열하는 방법을 "사전" 순으로 함수 만들기
 # 사전 순으로 k 번째를 출력
 
-import sys
-from pathlib import Path
 
-filename = Path.cwd() / 'solving-club/input/input_21717.txt'
-sys.stdin = open(filename, 'r')
+# 아래의 방법(재귀)으로는 사전순이 되지 않음.
+def permutation(i, n, c, arr):
+    print(f'{i}: 함수 호출 시작')
+    p = arr
 
-def permutation():
+    c += 1
+    print(c)
+
+    if i == n:
+        print(f'{i}: 함수 반환 ==>', end=' ')
+        print(p)
+    else:
+        for j in range(i, n):
+            p[i], p[j] = p[j], p[i]
+            print(f'j: {j}')
+            permutation(i+1, n, c, p)
+            print(f'{i}: 재귀 후 (j: {j})')
+            p[i], p[j] = p[j], p[i]
+            print(p)
 
 
+def solution(n, k):    # n : 원소 개수, k : 사전 순으로 출력했을 때의 번호
+    arr = [x for x in range(1, n+1)]
 
-def solution(n, k):
-    answer = []
+    cnt = 0
 
-    return answer
+    permutation(0, n, cnt, arr)
+
+
+    return cnt
+
+
+result = solution(3, 5)
+
+print(result)
