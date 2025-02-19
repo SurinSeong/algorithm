@@ -16,10 +16,10 @@ def solution(n, k):
         
         numbers = [i+1 for i in range(n)]    # 순열에 사용할 숫자 리스트
         
-        answer[i][0] = (i // (n-1)) + 1
-        used.append(answer[i][0])
+        # answer[i][0] = (i // (n-1)) + 1
+        # used.append(answer[i][0])
         
-        for j in range(1, n):
+        for j in range(n-1, -1, -1):    # 뒤에서 부터 넣기기
             
             idx = 0    # 순열에 사용할 숫자 가리키는 인덱스
         
@@ -32,7 +32,7 @@ def solution(n, k):
                     idx = (idx+1) % n
                     continue
                 
-                answer[i][j] = numbers[idx]
+                answer[i][j] = max()
                 used.append(numbers[idx])
                 break
     
