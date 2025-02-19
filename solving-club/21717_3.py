@@ -11,13 +11,31 @@ def solution(n, k):
     answer = [[0] * n for _ in range(k)]
     
     for i in range(k):
-        used = []
-        numbers = [i+1 for i in range(n)]
-        for j in range(n):
-            if numbers[j] in used:
-                j = (j+1) % n
-            else:
-            answer[i][j] = j+1
-            used.append(j+1)
+        
+        used = []    # 이미 순열에 사용한 숫자 리스트
+        
+        numbers = [i+1 for i in range(n)]    # 순열에 사용할 숫자 리스트
+        
+        answer[i][0] = (i // (n-1)) + 1
+        used.append(answer[i][0])
+        
+        for j in range(1, n):
+            
+            idx = 0    # 순열에 사용할 숫자 가리키는 인덱스
+        
+            while True:
+                if numbers[idx] in used:    # 만약 이미 사용한 숫자라면
+                    idx = (idx+1) % n    # 인덱스 업데이트
+                    continue
+                
+                elif answer[i-1][j] == numbers[idx]:
+                    idx = (idx+1) % n
+                    continue
+                
+                answer[i][j] = numbers[idx]
+                used.append(numbers[idx])
+                break
     
     return answer
+
+print(solution(3, 5))
