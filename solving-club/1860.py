@@ -11,17 +11,21 @@ sys.stdin = open(filename, 'r', encoding='utf-8')
 0초 ~ M초의 시간 => K개의 붕어빵
 """
 def making_fishbread(arr, in_one):    # arr : 손님들이 오는 시간,
-    fishes = [0] * 11112
     previous = 0
     pre_total = 0
 
     while arr:
         customer = arr.popleft()    # 손님 도착 시간
-
+        
+        fishes = [0] * 11112
         for sec in range(previous+1, customer+1):    # 손님 도착 시간까지의 붕어빵 넣어줌.
             fishes[sec] = in_one
-
-        total = sum(fishes) + pre_total
+        
+        if previous == customer:
+            total = pre_total
+            
+        else:
+            total = sum(fishes) + pre_total
 
         if total >= 1:    # 붕어빵이 적어도 하나는 있음.
             total -= 1    # 붕어빵 하나 주기
