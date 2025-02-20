@@ -2,7 +2,7 @@ import sys
 from pathlib import Path
 from collections import deque
 
-filename = Path.cwd() / 'solving-club/input/input_1860.txt'
+filename = Path.cwd() / 'solving-club/input/input_1860_2.txt'
 sys.stdin = open(filename, 'r', encoding='utf-8')
 
 # 진기의 최고급 붕어빵
@@ -10,29 +10,29 @@ sys.stdin = open(filename, 'r', encoding='utf-8')
 예약자 : N명
 0초 ~ M초의 시간 => K개의 붕어빵
 """
-def making_fishbread(arr, m, k):    # arr : 손님들이 오는 시간, m : 붕어빵 만드는데 걸리는 시간,
-    # 1초에 몇개 만들 수 있는지
-    one_sec = k/m
-    # 이전 손님이 왔던 시간
-    previous_customer = arr.popleft()
-    # 남아있는 붕어빵 개수
-    total = 0
+def making_fishbread(arr, in_one):    # arr : 손님들이 오는 시간,
+    fishes = [0] * 11112
+    previous = 0
+    pre_total = 0
 
     while arr:
-        # 첫 번째 손님
-        customer = arr.popleft()
+        customer = arr.popleft()    # 손님 도착 시간
 
-        # 첫 번째 손님이 올 때까지 만들 수 있는 붕어빵의 개수
-        total += (customer - previous_customer) * one_sec_num
+        for sec in range(previous+1, customer+1):    # 손님 도착 시간까지의 붕어빵 넣어줌.
+            fishes[sec] = in_one
 
-        # 가장 빨리오는 손님이 붕어빵을 먹을 수 있다면
-        if total < 1:
+        total = sum(fishes) + pre_total
+
+        if total >= 1:    # 붕어빵이 적어도 하나는 있음.
+            total -= 1    # 붕어빵 하나 주기
+        else:
             return 'Impossible'
 
-        total -= 1
-        previous_customer = customer
+        # 다음 손님 확인을 위한 업데이트
+        previous = customer
+        pre_total = total
 
-    return 'possible'
+    return 'Possible'
 
 
 # 테스트 케이스 수
@@ -52,7 +52,8 @@ for tc in range(1, T+1):
 
     seconds = deque(seconds)    # 덱으로 만든다.
 
-    # 붕어빵 만들기 시작
-    answer = making_fishbread(seconds, M, K)
+    one_sec = K/M
+
+    answer = making_fishbread(seconds, one_sec)
 
     print(f'#{tc} {answer}')
