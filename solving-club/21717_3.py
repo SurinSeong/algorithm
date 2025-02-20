@@ -5,19 +5,24 @@
 # 자연수 : k
 # 사람을 나열하는 방법을 "사전" 순으로 함수 만들기
 # 사전 순으로 k 번째를 출력
+def factorial(n):
+    if n == 1:
+        return 1
+    else:
+        return factorial(n-1) * n
+
 
 def solution(n, k):
     # 순열을 넣을 2차원 리스트
     answer = [[0] * n for _ in range(k)]
-    
+    rotation = factorial(n) // n
+
     for i in range(k):
         
         used = []    # 이미 순열에 사용한 숫자 리스트
-        
         numbers = [i+1 for i in range(n)]    # 순열에 사용할 숫자 리스트
-        
-        # answer[i][0] = (i // (n-1)) + 1
-        # used.append(answer[i][0])
+
+        answer[i][0] = (i // rotation) + 1
         
         for j in range(n-1, -1, -1):    # 뒤에서 부터 넣기기
             
