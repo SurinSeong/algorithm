@@ -47,6 +47,8 @@ def divide_and_conquer(arr1, arr2, n):
             result.append(group1.popleft())
             idx_list.append(idx_group1.popleft())
             group1, idx_group1 = list(group1), list(idx_group1)
+            
+    # return result, idx_list 
     
     while group1:
         group1, idx_group1 = deque(group1), deque(idx_group1)
