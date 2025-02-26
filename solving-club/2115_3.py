@@ -35,7 +35,7 @@ def dfs(honey_idx, honey_benefit, honey_sum):    # 선택할 벌통의 인덱스
     dfs(honey_idx+1, honey_benefit+cnt_benefit, honey_sum+cnt_sum)
 
     # 현재 꿀 선택하지 않았다면
-    dfs(honey_idx+1, honey_benefit, honey_idx)
+    dfs(honey_idx+1, honey_benefit, honey_sum)
 
 
 # 테스트 케이스 개수

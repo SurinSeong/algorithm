@@ -28,8 +28,8 @@ for x in range(1, T+1):
 
     # 벌통 정보
     honey = [list(map(int, input().split())) for _ in range(N)]
-    # 새로운 배열 만들기
-    matrix = [[0]*(N-M+1) for _ in range(N)]
+    
+    answer = 0
 
     # 첫번째 일꾼이 m개 선택
     for i1 in range(N):
@@ -46,25 +46,23 @@ for x in range(1, T+1):
                 # 제곱의 합의 최댓값 업데이트
                 first_select_honey_max = max(max(first_comb_list), first_select_honey_max)
 
+            # 두 번째가 선택한 벌꿀 리스트
             for i2 in range(i1, N):
                 for j2 in range(0, N-M+1):
                     if i1 == i2 and i2 < i1+M:
                         continue
                     # 첫 번째가 선택한 벌꿀 리스트
-                    first_select_honey_list = honey[i1][j1:j1 + M]
-                    first_select_honey_max = 0
+                    second_select_honey_list = honey[i2][j2:j2 + M]
+                    second_select_honey_max = 0
 
                     # 부분 집합은 => 1부터 N개까지 각각 선택하는 조합의 모든 경우의 수
                     for select_cnt in range(1, M + 1):
-                        comb = itertools.combinations(first_select_honey_list, select_cnt)
+                        comb = itertools.combinations(second_select_honey_list, select_cnt)
                         # 조합에서 이익 구하기
-                        first_comb_list = list(map(cal_square_sum, comb))
+                        second_comb_list = list(map(cal_square_sum, comb))
                         # 제곱의 합의 최댓값 업데이트
-                        first_select_honey_max = max(max(first_comb_list), first_select_honey_max)
-
-
-    calculate_double(honey, N, M, C)
-
-    answer = find_max_total(matrix, N, M, C)
+                        second_select_honey_max = max(max(second_comb_list), second_select_honey_max)
+                        
+                    answer = max(first_select_honey_max+second_select_honey_max, answer)
 
     print(f'#{x} {answer}')
