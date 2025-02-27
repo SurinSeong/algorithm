@@ -54,7 +54,7 @@ for tc in range(1, T+1):
     # 숫자의 개수
     N = int(input())
     
-    # 연산자 카드 + - * /
+    # 연산자 카드 +2 -1 *0 /1
     symbol_counts = list(map(int, input().split()))
             
     # 숫자 카드
