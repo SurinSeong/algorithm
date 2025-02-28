@@ -61,6 +61,7 @@ def check_status(ci, cj, cur_eye):
                 
     # 청소 전인 칸을 찾았다면         
     cur_eye = (cur_eye+3) % 4    # 반시계로 돌리기
+
     if rooms[ci+delta[cur_eye][0]][cj+delta[cur_eye][1]] == 0:    # 청소 전이라면
         ci, cj = ci+delta[cur_eye][0], cj+delta[cur_eye][1]    # 칸 이동
         
