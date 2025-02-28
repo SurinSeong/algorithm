@@ -1,6 +1,5 @@
 import sys
 from pathlib import Path
-import itertools
 
 filename = Path.cwd() / 'solving-club/input/input_4012.txt'
 sys.stdin = open(filename, 'r', encoding='utf-8')
@@ -17,26 +16,35 @@ sys.stdin = open(filename, 'r', encoding='utf-8')
 """
 def dfs(i, arr):
     global min_gap
-
-    if len(arr) == N//2:
-        others = []
+    
+    if i == N:    # 끝까지 탐색했으면 되돌아가기
+        return
+    
+    if len(arr) == N//2:    # 선택한 개수가 재료 개수의 절반일 때
+        others = []    # B에게 만들어줄 요리의 재료들
         for food in kind_of_food:
             if food not in arr:
                 others.append(food)
 
-        syn1, syn2 = 0, 0
+        syn1, syn2 = 0, 0    # A, B에게 만들어줄 요리의 재료들의 시너지 합
         for i in range(N//2-1):
             for j in range(i, N//2):
-                syn1 += (S[arr[i]][arr[j]]+S[arr[j]][arr[i]])
-                syn2 += (S[others[i]][others[j]]+S[others[j]][others[i]])
+                if i != j:    # 같은 재료를 선택하지는 않았으니깐
+                    syn1 += (S[arr[i]][arr[j]]+S[arr[j]][arr[i]])
+                    syn2 += (S[others[i]][others[j]]+S[others[j]][others[i]])
 
-        min_gap = min(min_gap, abs(syn1-syn2))
+        min_gap = min(min_gap, abs(syn1-syn2))    # 가장 작은 차이 구하기
         return
 
-    checked[i] = True
-    arr.append(kind_of_food[i])
-    dfs(i+1, picked)
+    # 전체 재료 개수의 절반 만큼 넣을 때까지 계속
+    checked[i] = True    # 사용여부 체크
+    arr.append(kind_of_food[i])    # A에게 넣어주기
+    dfs(i+1, arr)    # 다음 인덱스로 이동
+    
+    # 백트래킹
     checked[i] = False
+    arr.pop()
+    dfs(i+1, arr)
 
 
 # 테스트 케이스 개수
