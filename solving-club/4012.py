@@ -22,23 +22,22 @@ def dfs(i, arr):
     
     if len(arr) == N//2:    # 선택한 개수가 재료 개수의 절반일 때
         others = []    # B에게 만들어줄 요리의 재료들
-        for food in kind_of_food:
-            if food not in arr:
-                others.append(food)
+        for kind in range(N):
+            if kind not in arr:
+                others.append(kind)
 
         syn1, syn2 = 0, 0    # A, B에게 만들어줄 요리의 재료들의 시너지 합
         for i in range(N//2-1):
-            for j in range(i, N//2):
-                if i != j:    # 같은 재료를 선택하지는 않았으니깐
-                    syn1 += (S[arr[i]][arr[j]]+S[arr[j]][arr[i]])
-                    syn2 += (S[others[i]][others[j]]+S[others[j]][others[i]])
+            for j in range(i+1, N//2):
+                syn1 += (S[arr[i]][arr[j]]+S[arr[j]][arr[i]])
+                syn2 += (S[others[i]][others[j]]+S[others[j]][others[i]])
 
         min_gap = min(min_gap, abs(syn1-syn2))    # 가장 작은 차이 구하기
         return
 
     # 전체 재료 개수의 절반 만큼 넣을 때까지 계속
     checked[i] = True    # 사용여부 체크
-    arr.append(kind_of_food[i])    # A에게 넣어주기
+    arr.append(i)    # A에게 넣어주기
     dfs(i+1, arr)    # 다음 인덱스로 이동
     
     # 백트래킹
@@ -54,9 +53,6 @@ for tc in range(1, T+1):
     # 종류
     N = int(input())
     S = [list(map(int, input().split())) for _ in range(N)]
-
-    # 종류 나누기
-    kind_of_food = [n for n in range(N)]
 
     # 선택했는지
     checked = [False] * N
