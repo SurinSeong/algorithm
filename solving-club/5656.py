@@ -16,18 +16,43 @@ sys.stdin = open(filename, 'r', encoding='utf-8')
 
 남은 벽돌의 개수는??
 """
+def find_first_number_in_col(arr):
+    for j in range(W):
+        for i in range(H):
+            if blocks[i][j] > 0:
+                arr.append((i, j))
+                break
+
+
 # 벽돌 깨기
-def crush_blocks():
+def crush_blocks(i, j):
     
-    pass
+    if blocks[i][j] == 1:
+        blocks[i][j] = 0
+        return
+    
+    for d in range(4):
+        for k in range(1, blocks[i][j]):
+            ni, nj = i+delta[d][0]*k, j+delta[d][1]*k
+            if (0 <= ni < W) and (0 <= nj < H):    # 범위에 있으면
+                if blocks[ni][nj] > 2:    # 1보다 큰 수가 있으면 또 이동할 수 있기 때문에
+                    crush_blocks(ni, nj)
+                elif blocks[ni][nj] == 1:
+                    blocks[ni][nj] = 0    # 0으로 바꿔주기
 
 
+# 남아있는 벽돌 수 찾기
 def find_max():
-    # 가장 위의 행의 1을 찾는다.
-    # 없애간다.
-    # 2 이상의 숫자를 만나면 계속 상하좌우로 가면서 터뜨린다. 
-    pass
-
+    global min_cnt
+    
+    cnt = 0
+    
+    for i in range(H):
+        for j in range(W):
+            if blocks[i][j] != 0:
+                cnt += 1
+                
+    min_cnt = min(min_cnt, cnt)
 
 
 # 테스트 케이스 개수
@@ -39,13 +64,14 @@ for tc in range(1, T+1):
     # 벽돌의 배열
     blocks = [list(map(int, input().split())) for _ in range(H)]
     
+    # 상하좌우 델타
+    delta = [[0, 1], [1, 0], [0, -1], [-1, 0]]
+    
     answer = 0
     
-    # 행을 돌면서 1을 찾는다.
-    for i in range(H):
-        for j in range(W):
-            if blocks[i][j] > 0:    # 1 이상이면
-                crush_blocks()
+    min_cnt = W*H
+    
+    
         
     
     print(f'{tc} {answer}')
