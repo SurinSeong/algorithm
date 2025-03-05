@@ -71,6 +71,10 @@ for tc in range(1, T+1):
     
     min_cnt = W*H
     
+    first_numbers = []
+    
+    find_first_number_in_col(first_numbers)
+    
     
         
     
