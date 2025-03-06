@@ -30,7 +30,7 @@ T = int(input())
 
 for tc in range(1, T+1):
     N = int(input())
-    tree = [[0]*3 for_ in range(N+1)]
+    tree = [[0]*3 for _ in range(N+1)]
     
     for i in range(N):
         temp = input().split()
