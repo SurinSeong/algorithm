@@ -7,28 +7,22 @@
 - 최대 K만큼의 무게만 넣을 수 있는 배낭
 - 최대한 즐거운 여행을 할 수 있는 가져갈 물건의 개수
 """
-# 최대 가치 찾기
-def find_max_value():
+# 최대 가치 찾기 - DFS 이용하기
+def dfs(idx, remain, v):
     global max_v
 
-    for i in range(N):
-        if K >= info[0][i]:    # 배낭에 넣을 수 있는 무게와 같거나 적으면
-            remain = K - info[0][i]
-            current_v = info[1][i]
-            j = i+1
-            while True:
-                if j == N:
-                    break
+    if remain == 0:
+        max_v = max(max_v, v)
+        return
 
-                remain -= info[0][j]  # 나머지 업데이트
+    if idx == N:
+        max_v = max(max_v, v)
+        return
 
-                if remain < 0:
-                    break
+    if remain >= info[0][idx]:
+        dfs(idx+1, remain-info[0][idx], v+info[1][idx])
 
-                current_v += info[1][j]    # 현재까지의 가치 업데이트
-                j += 1  # 인덱스 업데이트
-
-            max_v = max(max_v, current_v)
+    dfs(idx+1, remain, v)
 
 
 # 물품의 수, 버틸 수 있는 무게
@@ -43,6 +37,6 @@ for i in range(N):
     info[0][i], info[1][i] = W, V
 
 max_v = 0
-find_max_value()
+dfs(0, K, 0)
 
 print(max_v)
