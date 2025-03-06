@@ -98,6 +98,15 @@ for tc in range(1, T+1):
     start_cols = []    # 횟수 만큼의 열을 담을 리스트
     
     min_cnt = W*H
+    
+    first_numbers = []
+    
+    find_first_number_in_col(first_numbers)
+    
+    
+        
+    
+    print(f'{tc} {answer}')
 
     dfs(0, start_cols)
 
