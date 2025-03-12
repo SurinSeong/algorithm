@@ -9,28 +9,9 @@
 """
 def dfs(si, sj):
 
-    stack = []
-    stack.append([si, sj])
 
-    visited = [[False] * N for _ in range(N)]
-    visited[si][sj] = True
 
-    cnt = 0
 
-    while stack:    # stack이 빌 때까지
-
-        ci, cj = stack.pop()
-        cnt += 1
-
-        for d in range(4):
-            ni, nj = ci + dy[d], cj + dx[d]    # 다음으로 움직일 좌표
-            if 0 <= ni < N and 0 <= nj < N:    # 범위 안에 있으면
-                if not visited[ni][nj]:    # 방문했는지 확인하기
-                    if rooms[ni][nj] == rooms[ci][cj] + 1:    # 이동하려는 곳이 현재 위치보다 1 크다면
-                        stack.append([ni, nj])
-                        visited[ni][nj] = True
-
-    return cnt
 
 
 # 테스트 케이스 개수
@@ -49,10 +30,6 @@ for tc in range(1, T+1):
 
     for i in range(N):
         for j in range(N):
-            current_cnt = dfs(i, j)
-            if max_cnt <= current_cnt:    # 가장 많이 이동했다면
-                max_cnt = current_cnt
-                if rooms[i][j] < room_number:    # 현재의 방번호가 작다면
-                    room_number = rooms[i][j]
+            dfs(i, j)
 
     print(f'#{tc} {room_number} {max_cnt}')
