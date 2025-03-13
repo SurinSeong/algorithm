@@ -49,7 +49,7 @@ for tc in range(1, T+1):
         # 가장 마지막 인덱스
         mi = max_idx_list.pop()
         if mi > not_max:
-            number_list[not_max], number_list[mi] = number_list[mi], number_list[not_max]
+            number_list[not_max], number_lis1244.pyt[mi] = number_list[mi], number_list[not_max]
             rotation -= 1
 
     answer = ''.join(map(str, number_list))
