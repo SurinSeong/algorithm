@@ -7,7 +7,14 @@
 - 방이 있어야 이동 가능하고, 이동하려는 방의 숫자가 현재 방 숫자보다 정확히 1 커야 한다.
 - 처음에 어디에 있어야 가장 많은 개수의 방을 이동할 수 있을까?
 """
-def dfs(si, sj):
+def dfs(si, sj, cnt):
+    for d in range(4):
+        ni, nj = si + dy[d], sj + dx[d]
+        if 0 <= ni < N and 0 <= nj < N:    # 범위 안에 있으면
+            if not visited[ni][nj]:    # 방문 전이면
+                if rooms[ni][nj] == rooms[si][sj] + 1:    # 현재보다 하나 크다면
+                    visited[ni][nj] = True
+                    dfs(ni, nj, cnt+1)
 
 
 
@@ -27,6 +34,8 @@ for tc in range(1, T+1):
 
     max_cnt = 1
     room_number = 1000000
+    
+    visited = [[False]*N for _ in range(N)]
 
     for i in range(N):
         for j in range(N):
