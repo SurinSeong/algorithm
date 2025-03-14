@@ -7,37 +7,29 @@
 """
 from collections import deque
 
-def find_L():
-    land_list = []
-
-    for i in range(N):
-        for j in range(M):
-            if info[i][j] == 'L':
-                land_list.append([i, j])
-
-    return land_list
-
 dy = [0, 1, 0, -1]
 dx = [1, 0, -1, 0]
 
-def move_to_W(si, sj, cnt):
-    global current_min
+def bfs():
 
-    if info[si][sj] == 'W':    # 물을 만나면
-        current_min = min(current_min, cnt)
-        return
+    queue = deque()
 
-    if cnt > current_min:
-        return
+    for i in range(N):
+        for j in range(M):
+            if info[i][j] == 'W':
+                queue.append((i, j))
+                visited[i][j] = 0
 
-    for d in range(4):
-        ni, nj = si + dy[d], sj + dx[d]
-        if 0 <= ni < N and 0 <= nj < M:    # 범위 안에 있으면
-            if not visited[ni][nj]:    # 방문한 적이 없으면
-                visited[ni][nj] = True
-                move_to_W(ni, nj, cnt+1)
-                visited[ni][nj] = False
+    while queue:
+        ci, cj, distance = queue.popleft()
 
+        for d in range(4):
+            ni, nj = ci + dy[d], cj + dx[d]
+            if 0 <= ni < N and 0 <= nj < M:
+                if visited[ni][nj] == -1:
+                    if info[ni][nj] == 'L':
+                        queue.append((ni, nj))
+                        visited[ni][nj] = visited[ci][cj] + 1
 
 
 # 테스트 케이스
@@ -48,23 +40,12 @@ for tc in range(1, T+1):
     N, M = map(int, input().split())
 
     # 정보
-    info = [list(input()) for _ in range(N)]
+    info = [list(input().strip()) for _ in range(N)]
 
-    # 땅이 있는 좌표
-    land_info = find_L()
+    visited = [[-1] * M for _ in range(N)]
 
-    answer = 0
+    bfs()
 
-    visited = [[False] * M for _ in range(N)]
-
-    for si, sj in land_info:
-
-        current_min = 10**6
-
-        visited[si][sj] = True
-        move_to_W(si, sj, 0)
-        visited[si][sj] = False
-
-        answer += current_min
+    answer = sum(visited[i][j] for i in range(N) for j in range(M) if info[i][j] == 'L')
 
     print(f'#{tc} {answer}')
